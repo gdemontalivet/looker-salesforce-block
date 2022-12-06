@@ -1,0 +1,906 @@
+- dashboard: sales_overview
+  title: Sales Overview
+  layout: newspaper
+  description: ''
+  preferred_slug: 2AYmqDQrn3GooShdluNLwm
+  elements:
+  - title: Bookings (QTD)
+    name: Bookings (QTD)
+    model: salesforce_block
+    explore: opportunity
+    type: single_value
+    fields: [opportunity.total_arr, opportunity.close_fiscal_quarter]
+    pivots: [opportunity.close_fiscal_quarter]
+    fill_fields: [opportunity.close_fiscal_quarter]
+    filters:
+      opportunity.close_date: this fiscal quarter, last fiscal quarter
+      opportunity.is_won: 'Yes'
+    sorts: [opportunity.close_fiscal_quarter desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields: [{table_calculation: change, label: Change, expression: "(pivot_index(${opportunity.total_arr},\
+          \ 1) - pivot_index(${opportunity.total_arr}, 2))/pivot_index(${opportunity.total_arr},\
+          \ 2)", value_format: !!null '', value_format_name: percent_1, _kind_hint: supermeasure,
+        _type_hint: number}]
+    filter_expression: |-
+      # Only compare QTDs
+      ${opportunity.day_of_fiscal_quarter} <= ${opportunity.current_day_of_fiscal_quarter}
+    custom_color_enabled: true
+    custom_color: ''
+    show_single_value_title: true
+    show_comparison: true
+    comparison_type: change
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    comparison_label: ''
+    enable_conditional_formatting: false
+    conditional_formatting: [{type: equal to, value: !!null '', background_color: "#3EB0D5",
+        font_color: !!null '', color_application: {collection_id: b43731d5-dc87-4a8e-b807-635bef3948e7,
+          palette_id: 85de97da-2ded-4dec-9dbd-e6a7d36d5825}, bold: false, italic: false,
+        strikethrough: false, fields: !!null ''}]
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    font_size: small
+    series_types: {}
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Billing Country: account.billing_country
+    row: 0
+    col: 0
+    width: 5
+    height: 3
+  - title: Closed Won Opps
+    name: Closed Won Opps
+    model: salesforce_block
+    explore: opportunity
+    type: single_value
+    fields: [opportunity.count]
+    filters:
+      opportunity.is_won: 'Yes'
+      opportunity.is_closed: 'Yes'
+    sorts: [opportunity.total_closed_won_new_business_amount desc]
+    limit: 500
+    column_limit: 50
+    custom_color_enabled: true
+    custom_color: ''
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: progress_percentage
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    comparison_label: Quota
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    font_size: small
+    series_types: {}
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Billing Country: account.billing_country
+    row: 0
+    col: 11
+    width: 6
+    height: 3
+  - title: Top 10 Reps This Quarter
+    name: Top 10 Reps This Quarter
+    model: salesforce_block
+    explore: opportunity
+    type: looker_bar
+    fields: [opportunity_owner.name, opportunity.total_arr]
+    filters:
+      opportunity.total_arr: ">0"
+      opportunity.close_date: this quarter
+      opportunity.is_won: 'Yes'
+    sorts: [opportunity.total_arr desc]
+    limit: 10
+    column_limit: 50
+    x_axis_gridlines: false
+    y_axis_gridlines: false
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: opportunity.total_arr,
+            id: opportunity.total_arr, name: Total Amount}], showLabels: false, showValues: false,
+        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
+    series_types: {}
+    series_colors:
+      opportunity.total_arr: "#F67F68"
+    series_labels:
+      opportunity.total_new_closed_won_amount_qtd: Closed Won
+      opportunity.total_pipeline_amount: Pipeline
+    value_labels: legend
+    label_type: labPer
+    show_row_numbers: true
+    truncate_column_names: false
+    hide_totals: false
+    hide_row_totals: false
+    table_theme: white
+    enable_conditional_formatting: true
+    conditional_formatting: [{type: along a scale..., value: !!null '', background_color: !!null '',
+        font_color: !!null '', color_application: {collection_id: legacy, palette_id: legacy_diverging1,
+          options: {steps: 5}}, bold: false, italic: false, strikethrough: false,
+        fields: []}, {type: less than, value: 1, background_color: "#F36254", font_color: !!null '',
+        color_application: {collection_id: legacy, palette_id: legacy_diverging1,
+          options: {steps: 5, constraints: {max: {type: number, value: 0.1}, min: {
+                type: number, value: 0}, mid: {type: number, value: 0.5}}}}, bold: false,
+        italic: false, strikethrough: false, fields: []}, {type: between, value: [
+          1, 2], background_color: "#FCF758", font_color: !!null '', color_application: {
+          collection_id: legacy, palette_id: legacy_diverging1}, bold: false, italic: false,
+        strikethrough: false, fields: []}, {type: greater than, value: 2, background_color: "#4FBC89",
+        font_color: !!null '', color_application: {collection_id: legacy, palette_id: legacy_diverging1},
+        bold: false, italic: false, strikethrough: false, fields: []}]
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    subtotals_at_bottom: false
+    hidden_fields: [opportunity.total_new_closed_won_amount_qtd]
+    defaults_version: 1
+    listen:
+      Billing Country: account.billing_country
+    row: 3
+    col: 0
+    width: 6
+    height: 10
+  - title: Closed Deals by Opportunity Type
+    name: Closed Deals by Opportunity Type
+    model: salesforce_block
+    explore: opportunity
+    type: looker_column
+    fields: [opportunity.close_quarter, opportunity.type, opportunity.total_arr]
+    pivots: [opportunity.type]
+    fill_fields: [opportunity.close_quarter]
+    filters:
+      opportunity.close_fiscal_quarter: 4 fiscal quarters
+      opportunity.is_won: 'Yes'
+    sorts: [opportunity.close_quarter, opportunity.type 0]
+    limit: 500
+    column_limit: 50
+    x_axis_gridlines: false
+    y_axis_gridlines: false
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: right
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: ordinal
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: true
+    show_silhouette: false
+    totals_color: "#707070"
+    color_application:
+      collection_id: custom
+      palette_id: custom-diverging-0
+      options:
+        steps: 5
+        reverse: true
+    y_axes: [{label: Amount in Pipeline, orientation: left, series: [{id: Won - 0
+              - opportunity.total_pipeline_amount, name: Won, axisId: Won - 0 - opportunity.total_pipeline_amount},
+          {id: Above 80% - 1 - opportunity.total_pipeline_amount, name: Above 80%,
+            axisId: Above 80% - 1 - opportunity.total_pipeline_amount}, {id: 60 -
+              80% - 2 - opportunity.total_pipeline_amount, name: 60 - 80%, axisId: 60
+              - 80% - 2 - opportunity.total_pipeline_amount}, {id: 40 - 60% - 3 -
+              opportunity.total_pipeline_amount, name: 40 - 60%, axisId: 40 - 60%
+              - 3 - opportunity.total_pipeline_amount}, {id: 20 - 40% - 4 - opportunity.total_pipeline_amount,
+            name: 20 - 40%, axisId: 20 - 40% - 4 - opportunity.total_pipeline_amount},
+          {id: Under 20% - 5 - opportunity.total_pipeline_amount, name: Under 20%,
+            axisId: Under 20% - 5 - opportunity.total_pipeline_amount}, {id: Lost
+              - 6 - opportunity.total_pipeline_amount, name: Lost, axisId: Lost -
+              6 - opportunity.total_pipeline_amount}], showLabels: false, showValues: false,
+        valueFormat: '$0.0,, "M"', unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    x_axis_label: ''
+    hidden_series: [Lost - 6 - opportunity.total_arr, Under 20% - 5 - opportunity.total_arr,
+      Won - 0 - opportunity.total_pipeline_amount, Lost - 6 - opportunity.total_pipeline_amount,
+      Closed Won - 6 - opportunity.total_pipeline_amount]
+    label_value_format: ''
+    series_types: {}
+    series_colors: {}
+    label_color: ["#FFFFFF"]
+    x_axis_datetime_label: ''
+    show_null_points: true
+    interpolation: linear
+    hidden_fields: []
+    defaults_version: 1
+    listen:
+      Billing Country: account.billing_country
+    row: 13
+    col: 0
+    width: 8
+    height: 9
+  - title: Won Amount Running Total with Win %
+    name: Won Amount Running Total with Win %
+    model: salesforce_block
+    explore: opportunity
+    type: looker_line
+    fields: [opportunity.win_percentage, opportunity.total_arr_closed_won, opportunity.close_month]
+    fill_fields: [opportunity.close_month]
+    filters:
+      opportunity.close_week: 1 years
+    sorts: [opportunity.close_month]
+    limit: 500
+    dynamic_fields: [{table_calculation: running_total_won_amount, label: Running
+          Total Won Amount, expression: 'running_total(${opportunity.total_arr_closed_won})',
+        value_format: !!null '', value_format_name: usd_0, _kind_hint: measure, _type_hint: number}]
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    show_null_points: false
+    interpolation: monotone
+    y_axes: [{label: '', orientation: left, series: [{axisId: opportunity.total_arr,
+            id: opportunity.total_arr, name: Total Amount}], showLabels: true, showValues: true,
+        unpinAxis: false, tickDensity: default, type: linear}, {label: !!null '',
+        orientation: right, series: [{axisId: opportunity.win_percentage, id: opportunity.win_percentage,
+            name: Win Percentage}], showLabels: true, showValues: true, unpinAxis: false,
+        tickDensity: default, type: linear}]
+    series_types:
+      opportunity.total_arr: area
+      running_total_won_amount: area
+    series_colors:
+      running_total_won_amount: "#252A30"
+      opportunity.win_percentage: "#F67F68"
+    series_labels:
+      opportunity.win_percentage: Win %
+      running_total_won_amount: Won Amount
+    series_point_styles: {}
+    hidden_fields: [opportunity.total_arr_closed_won]
+    defaults_version: 1
+    listen:
+      Billing Country: account.billing_country
+    row: 3
+    col: 6
+    width: 11
+    height: 10
+  - title: Won Opps (QTD)
+    name: Won Opps (QTD)
+    model: salesforce_block
+    explore: opportunity
+    type: looker_grid
+    fields: [opportunity.name, account.segment, opportunity.close_date, opportunity.type,
+      opportunity.days_to_closed_won, opportunity.total_arr]
+    filters:
+      opportunity.close_date: 1 quarters
+      opportunity.is_closed: 'Yes'
+      opportunity.is_won: 'Yes'
+    sorts: [opportunity.total_arr desc]
+    limit: 500
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: true
+    header_text_alignment: left
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+    show_sql_query_menu_options: false
+    show_totals: true
+    show_row_totals: true
+    truncate_header: false
+    series_column_widths:
+      opportunity.days_to_closed_won: 155
+      opportunity.total_arr: 197
+      account.domain: 161
+      opportunity_owner.manager: 651
+      account.industry: 130
+      task.meetings: 957
+    series_cell_visualizations:
+      opportunity.total_arr:
+        is_active: false
+    conditional_formatting: [{type: along a scale..., value: !!null '', background_color: "#F67F68",
+        font_color: !!null '', color_application: {collection_id: custom, palette_id: custom-sequential-0,
+          options: {steps: 5, constraints: {min: {type: minimum}, mid: {type: number,
+                value: 0}, max: {type: maximum}}, mirror: true, reverse: false, stepped: false}},
+        bold: false, italic: false, strikethrough: false, fields: [opportunity.days_to_closed_won]},
+      {type: along a scale..., value: !!null '', background_color: "#F67F68", font_color: !!null '',
+        color_application: {collection_id: custom, palette_id: custom-sequential-0,
+          options: {steps: 5, constraints: {min: {type: minimum}, mid: {type: number,
+                value: 0}, max: {type: maximum}}, mirror: true, reverse: false, stepped: false}},
+        bold: false, italic: false, strikethrough: false, fields: [opportunity.total_arr]},
+      {type: along a scale..., value: !!null '', background_color: "#F67F68", font_color: !!null '',
+        color_application: {collection_id: custom, palette_id: custom-sequential-0,
+          options: {steps: 5, constraints: {min: {type: minimum}, mid: {type: number,
+                value: 0}, max: {type: maximum}}, mirror: true, reverse: false, stepped: false}},
+        bold: false, italic: false, strikethrough: false, fields: []}]
+    series_types: {}
+    hidden_fields: []
+    y_axes: []
+    defaults_version: 1
+    listen:
+      Billing Country: account.billing_country
+    row: 22
+    col: 0
+    width: 24
+    height: 12
+  - title: Bookings by Lead Source
+    name: Bookings by Lead Source
+    model: salesforce_block
+    explore: opportunity
+    type: looker_bar
+    fields: [opportunity.lead_source, opportunity.total_arr]
+    filters:
+      opportunity.total_arr: ">0"
+      opportunity.close_date: this quarter
+      opportunity.is_won: 'Yes'
+      opportunity.lead_source: "-NULL"
+    sorts: [opportunity.total_arr desc]
+    limit: 10
+    column_limit: 50
+    x_axis_gridlines: false
+    y_axis_gridlines: false
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: opportunity.average_amount_won,
+            id: opportunity.average_amount_won, name: Average Amount Won}], showLabels: true,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    series_types: {}
+    series_colors:
+      opportunity.total_arr: "#F67F68"
+    series_labels:
+      opportunity.total_new_closed_won_amount_qtd: Closed Won
+      opportunity.total_pipeline_amount: Pipeline
+    value_labels: legend
+    label_type: labPer
+    show_row_numbers: true
+    truncate_column_names: false
+    hide_totals: false
+    hide_row_totals: false
+    table_theme: white
+    enable_conditional_formatting: true
+    conditional_formatting: [{type: along a scale..., value: !!null '', background_color: !!null '',
+        font_color: !!null '', color_application: {collection_id: legacy, palette_id: legacy_diverging1,
+          options: {steps: 5}}, bold: false, italic: false, strikethrough: false,
+        fields: []}, {type: less than, value: 1, background_color: "#F36254", font_color: !!null '',
+        color_application: {collection_id: legacy, palette_id: legacy_diverging1,
+          options: {steps: 5, constraints: {max: {type: number, value: 0.1}, min: {
+                type: number, value: 0}, mid: {type: number, value: 0.5}}}}, bold: false,
+        italic: false, strikethrough: false, fields: []}, {type: between, value: [
+          1, 2], background_color: "#FCF758", font_color: !!null '', color_application: {
+          collection_id: legacy, palette_id: legacy_diverging1}, bold: false, italic: false,
+        strikethrough: false, fields: []}, {type: greater than, value: 2, background_color: "#4FBC89",
+        font_color: !!null '', color_application: {collection_id: legacy, palette_id: legacy_diverging1},
+        bold: false, italic: false, strikethrough: false, fields: []}]
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    subtotals_at_bottom: false
+    hidden_fields: [opportunity.total_new_closed_won_amount_qtd]
+    defaults_version: 1
+    listen:
+      Billing Country: account.billing_country
+    row: 13
+    col: 18
+    width: 6
+    height: 9
+  - title: Bookings by country
+    name: Bookings by country
+    model: salesforce_block
+    explore: opportunity
+    type: looker_google_map
+    fields: [account.billing_country, opportunity.total_arr_closed_won]
+    filters:
+      opportunity.close_fiscal_quarter: this quarter
+      opportunity.is_won: 'Yes'
+    sorts: [account.billing_country]
+    limit: 500
+    column_limit: 50
+    hidden_fields: []
+    hidden_points_if_no: []
+    series_labels: {}
+    show_view_names: false
+    map_plot_mode: points
+    heatmap_gridlines: false
+    heatmap_gridlines_empty: false
+    heatmap_opacity: 0.5
+    show_region_field: true
+    draw_map_labels_above_data: true
+    map_tile_provider: light
+    map_position: fit_data
+    map_latitude: 38.89103282648846
+    map_longitude: -96.9291114807129
+    map_zoom: 4
+    map_pannable: false
+    map_zoomable: false
+    map_marker_type: circle
+    map_marker_icon_name: default
+    map_marker_radius_mode: proportional_value
+    map_marker_units: meters
+    map_marker_proportional_scale_type: linear
+    map_marker_color_mode: fixed
+    show_legend: true
+    map_value_colors: ["#252A3", "#F67F68"]
+    quantize_map_value_colors: false
+    reverse_map_value_colors: true
+    map_scale_indicator: 'off'
+    series_types: {}
+    defaults_version: 0
+    y_axes: []
+    listen:
+      Billing Country: account.billing_country
+    row: 13
+    col: 9
+    width: 8
+    height: 9
+  - title: Biggest Wins
+    name: Biggest Wins
+    model: salesforce_block
+    explore: opportunity
+    type: looker_grid
+    fields: [opportunity.total_arr, account.name]
+    filters:
+      opportunity.is_won: 'Yes'
+      account.name: "-%custom%,-%custom%"
+    sorts: [opportunity.total_arr desc]
+    limit: 20
+    column_limit: 50
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: [{label: '', orientation: left, series: [{id: opportunity.total_closed_won_new_business_amount,
+            name: 'Closed Won ACV ', axisId: opportunity.total_closed_won_new_business_amount}],
+        showLabels: false, showValues: false, unpinAxis: false, tickDensity: default,
+        tickDensityCustom: 5, type: linear}]
+    font_size: small
+    series_types: {}
+    series_colors:
+      opportunity.total_closed_won_new_business_amount: "#462C9D"
+      opportunity.total_arr: "#F67F68"
+    truncate_column_names: false
+    subtotals_at_bottom: false
+    conditional_formatting: [{type: along a scale..., value: !!null '', background_color: !!null '',
+        font_color: !!null '', color_application: {collection_id: legacy, palette_id: legacy_diverging1},
+        bold: false, italic: false, strikethrough: false, fields: !!null ''}]
+    hidden_fields: [opportunity.name_id]
+    defaults_version: 1
+    series_column_widths:
+      account.name: 256
+    listen:
+      Billing Country: account.billing_country
+    row: 3
+    col: 18
+    width: 6
+    height: 10
+  - title: Prospects by Forecast Category and Segment
+    name: Prospects by Forecast Category and Segment
+    model: salesforce_block
+    explore: opportunity
+    type: looker_donut_multiples
+    fields: [account.segment, opportunity.forecast_category, account.count]
+    pivots: [opportunity.forecast_category]
+    filters:
+      account.segment: "-Unknown"
+      opportunity.stage_name: "-%Closed%"
+    sorts: [opportunity.close_month, account.segment, account.segment, opportunity.forecast_category]
+    limit: 500
+    column_limit: 50
+    show_value_labels: false
+    font_size: 7
+    charts_across: 3
+    colors: ["#FFCC00", "#1E2023", "#3399CC", "#CC3399", "#66CC66", "#999999", "#FF4E00",
+      "#A2ECBA", "#9932CC", "#0000CD"]
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    series_colors: {}
+    show_view_names: true
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Billing Country: account.billing_country
+    row: 34
+    col: 0
+    width: 16
+    height: 12
+  - title: Pipeline Forecast
+    name: Pipeline Forecast
+    model: salesforce_block
+    explore: opportunity
+    type: looker_column
+    fields: [opportunity.probability_group, opportunity.total_arr, opportunity.close_fiscal_quarter]
+    pivots: [opportunity.probability_group]
+    fill_fields: [opportunity.close_fiscal_quarter]
+    filters:
+      opportunity.close_month: 9 months ago for 12 months
+    sorts: [opportunity.probability_group, opportunity.probability_group__sort_]
+    x_axis_gridlines: false
+    y_axis_gridlines: false
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 21
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: []
+    y_axis_labels: [Amount in Pipeline]
+    x_axis_label: Opportunity Close Month
+    hidden_series: [Under 20%, Lost]
+    colors: ["#FFCC00", "#1E2023", "#3399CC", "#CC3399", "#66CC66", "#999999", "#FF4E00",
+      "#A2ECBA", "#9932CC", "#0000CD"]
+    series_colors: {}
+    series_labels:
+      '0': Lost
+      100 or Above: Won
+    x_axis_datetime_label: ''
+    defaults_version: 1
+    hidden_fields: []
+    listen:
+      Billing Country: account.billing_country
+    row: 46
+    col: 11
+    width: 13
+    height: 11
+  - title: Deals Closed by Segment
+    name: Deals Closed by Segment
+    model: salesforce_block
+    explore: opportunity
+    type: looker_area
+    fields: [account.segment, opportunity.count, opportunity.close_fiscal_quarter]
+    pivots: [account.segment]
+    fill_fields: [opportunity.close_fiscal_quarter]
+    filters:
+      opportunity.close_month: before tomorrow
+      opportunity.stage_name: Closed Won
+    sorts: [account.segment, opportunity.close_fiscal_quarter]
+    limit: 500
+    column_limit: 50
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: normal
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    show_null_points: true
+    interpolation: monotone
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: []
+    colors: ["#FFCC00", "#1E2023", "#3399CC", "#CC3399", "#66CC66", "#999999", "#FF4E00",
+      "#A2ECBA", "#9932CC", "#0000CD"]
+    series_colors: {}
+    defaults_version: 1
+    hidden_fields: []
+    listen:
+      Billing Country: account.billing_country
+    row: 34
+    col: 16
+    width: 8
+    height: 12
+  - title: Average Deal size
+    name: Average Deal size
+    model: salesforce_block
+    explore: opportunity
+    type: single_value
+    fields: [opportunity.average_deal_size]
+    filters:
+      opportunity.close_date: this quarter
+      opportunity.stage_name: Closed Won
+    sorts: [opportunity.average_deal_size desc]
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    font_size: medium
+    text_color: black
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Billing Country: account.billing_country
+    row: 0
+    col: 17
+    width: 7
+    height: 3
+  - title: Rep Roster By Average Annual Revenue and Total Pipeline Revenue
+    name: Rep Roster By Average Annual Revenue and Total Pipeline Revenue
+    model: salesforce_block
+    explore: opportunity
+    type: looker_bar
+    fields: [opportunity_owner.name, opportunity.total_pipeline_revenue, opportunity.average_revenue_won]
+    filters:
+      opportunity_owner.name: "-NULL"
+      opportunity.count_won: ">0"
+    sorts: [opportunity.total_pipeline_revenue desc]
+    limit: 20
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: false
+    show_y_axis_ticks: false
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: false
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: []
+    x_padding_right: 15
+    colors: ["#FFCC00", "#3399CC", "#1E2023", "#CC3399", "#66CC66", "#999999", "#FF4E00",
+      "#A2ECBA", "#9932CC", "#0000CD"]
+    series_types: {}
+    series_colors: {}
+    y_axis_orientation: [right]
+    x_axis_label_rotation: 0
+    defaults_version: 1
+    hidden_fields: []
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    listen: {}
+    row: 46
+    col: 0
+    width: 11
+    height: 15
+  - title: Pipeline QTD
+    name: Pipeline QTD
+    model: salesforce_block
+    explore: opportunity
+    type: single_value
+    fields: [opportunity.total_pipeline_amount]
+    filters:
+      opportunity.close_date: this fiscal quarter
+      opportunity_owner.name: ''
+    limit: 500
+    column_limit: 50
+    filter_expression: |-
+      # Only compare QTDs
+      ${opportunity.day_of_fiscal_quarter} <= ${opportunity.current_day_of_fiscal_quarter}
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: change
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    custom_color: ''
+    single_value_title: ''
+    comparison_label: vs. Last Quarter
+    font_size: small
+    hidden_fields: []
+    defaults_version: 1
+    y_axes: []
+    listen: {}
+    row: 0
+    col: 5
+    width: 6
+    height: 3
+  filters:
+  - name: Billing Country
+    title: Billing Country
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: tag_list
+      display: popover
+    model: salesforce_block
+    explore: opportunity
+    listens_to_filters: []
+    field: account.billing_country
