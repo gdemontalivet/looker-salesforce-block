@@ -1,0 +1,919 @@
+view: opportunity {
+  sql_table_name: "SC_PRESENTATION_LAYER"."VW_TB_SF_OPPORTUNITY"
+    ;;
+    fields_hidden_by_default: yes
+  drill_fields: [name,account.name,opportunity_owner.name,total_arr,is_closed,is_active,is_pipeline,lead_source,created_date,close_date]
+
+  dimension: id {
+    hidden: no
+    primary_key: yes
+    type: string
+    sql: ${TABLE}."ID" ;;
+  }
+
+
+
+  dimension: account_id {
+    type: string
+    sql: ${TABLE}."ACCOUNTID" ;;
+  }
+
+  dimension: is_active {
+    hidden: no
+    type: yesno
+    sql: initcap(${TABLE}."ACTIVE__C")='True' ;;
+  }
+
+  dimension: amount {
+    type: number
+    sql: ${TABLE}."AMOUNT" ;;
+  }
+
+
+  dimension: arr_usd {
+    hidden: no
+    type: number
+    sql: ${TABLE}."ARR_USD__C" ;;
+  }
+
+
+
+  dimension: authority__c {
+    type: string
+    sql: ${TABLE}."AUTHORITY__C" ;;
+  }
+
+  dimension: auto_renew__c {
+    hidden: no
+    label: "Auto Renew"
+    type: string
+    sql: ${TABLE}."AUTO_RENEW__C" ;;
+  }
+
+  dimension: billing_entity__c {
+    type: string
+    sql: ${TABLE}."BILLING_ENTITY__C" ;;
+  }
+
+  dimension: booking__c {
+    type: number
+    sql: ${TABLE}."BOOKING__C" ;;
+  }
+
+  dimension: branch__c {
+    type: string
+    sql: ${TABLE}."BRANCH__C" ;;
+  }
+
+  dimension: budget__c {
+    type: string
+    sql: ${TABLE}."BUDGET__C" ;;
+  }
+
+  dimension: campaignid {
+    type: string
+    sql: ${TABLE}."CAMPAIGNID" ;;
+  }
+
+  dimension: channel__c {
+    label: "Channel"
+    type: string
+    sql: ${TABLE}."CHANNEL__C" ;;
+  }
+
+
+
+
+  dimension_group: close {
+    hidden: no
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year,
+      fiscal_month_num,
+      fiscal_quarter,
+      fiscal_quarter_of_year,
+      fiscal_year
+    ]
+    sql: ${TABLE}."CLOSEDATE" ;;
+  }
+
+  dimension: commit__c {
+    type: string
+    sql: ${TABLE}."COMMIT__C" ;;
+  }
+
+  dimension: competitor {
+    type: string
+    sql: ${TABLE}."COMPETITOR__C" ;;
+  }
+
+  dimension: consequence__c {
+    type: string
+    sql: ${TABLE}."CONSEQUENCE__C" ;;
+  }
+
+  dimension: contactid {
+    type: string
+    sql: ${TABLE}."CONTACTID" ;;
+  }
+
+
+  dimension: contractid {
+    type: string
+    sql: ${TABLE}."CONTRACTID" ;;
+  }
+
+  dimension: cover_leap_year_count__c {
+    type: number
+    sql: ${TABLE}."COVER_LEAP_YEAR_COUNT__C" ;;
+  }
+
+  dimension: createdbyid {
+    type: string
+    sql: ${TABLE}."CREATEDBYID" ;;
+  }
+
+  dimension_group: created {
+    hidden: no
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."CREATEDDATE" ;;
+  }
+
+
+  dimension: currency_iso_code {
+    hidden: no
+    type: string
+    sql: ${TABLE}."CURRENCYISOCODE" ;;
+  }
+
+
+
+  dimension: description {
+    hidden: no
+    type: string
+    sql: ${TABLE}."DESCRIPTION" ;;
+  }
+
+
+  dimension_group: end {
+    hidden: no
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."END_DATE__C" ;;
+    html: {% if expires_soon._value == "Yes" %}
+
+      <p style="color: red">{{ rendered_value }}</p>
+
+    {% else %}
+
+      {{ rendered_value }}
+
+    {% endif %} ;;
+  }
+
+
+
+  dimension: forecast_category {
+    hidden: no
+    type: string
+    sql: ${TABLE}."FORECASTCATEGORY" ;;
+  }
+
+  dimension: forecast_category_name {
+    hidden: no
+    type: string
+    sql: ${TABLE}."FORECASTCATEGORYNAME" ;;
+  }
+
+
+
+  dimension: hasopportunitylineitem {
+    type: string
+    sql: ${TABLE}."HASOPPORTUNITYLINEITEM" ;;
+  }
+
+  dimension_group: invoice_date {
+    hidden: no
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."INVOICE_DATE__C" ;;
+  }
+
+
+
+  dimension: is_closed {
+    hidden: no
+    type: yesno
+    sql: initcap(${TABLE}."ISCLOSED")='True' ;;
+  }
+
+  dimension: is_deleted {
+    type: yesno
+    sql: initcap(${TABLE}."ISDELETED")='True' ;;
+  }
+
+  dimension: is_won {
+    hidden: no
+    type: yesno
+    sql: initcap(${TABLE}."ISWON")='True' ;;
+  }
+
+  dimension_group: lastactivitydate {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."LASTACTIVITYDATE" ;;
+  }
+
+  dimension: lastmodifiedbyid {
+    type: string
+    sql: ${TABLE}."LASTMODIFIEDBYID" ;;
+  }
+
+  dimension_group: lastmodifieddate {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."LASTMODIFIEDDATE" ;;
+  }
+
+  dimension_group: laststagechangedate {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."LASTSTAGECHANGEDATE" ;;
+  }
+
+
+
+  dimension: lead_source_new__c {
+    hidden: yes
+    type: string
+    sql: ${TABLE}."LEAD_SOURCE_NEW__C" ;;
+  }
+
+  dimension: lead_source {
+    hidden: no
+    type: string
+    sql: case when ${created_date}<'2019-09-01' then ${TABLE}."LEADSOURCE" else ${lead_source_new__c} end;;
+  }
+
+
+
+  dimension: loss_reason {
+    hidden: no
+    type: string
+    sql: ${TABLE}."LOSS_REASON__C" ;;
+  }
+
+
+
+  dimension_group: month_closed_date__c {
+    hidden: yes
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."MONTH_CLOSED_DATE__C" ;;
+  }
+
+
+
+  dimension: name {
+    hidden: no
+    type: string
+    sql: ${TABLE}."NAME" ;;
+    link: {
+      label: "Open in Salesforce"
+      url: "https://yourinstancename.lightning.force.com/lightning/r/Opportunity/{{ id._value }}/view"
+      icon_url: "https://www.awsquality.com/wp-content/uploads/2020/08/salesforce-icon-png-7.png"
+    }
+  }
+
+
+
+  dimension: next_step {
+    hidden: no
+    type: string
+    sql: ${TABLE}."NEXTSTEP" ;;
+  }
+
+ 
+
+  dimension: owner_id {
+    type: string
+    sql: ${TABLE}."OWNERID" ;;
+  }
+
+  dimension: pain__c {
+    type: string
+    sql: ${TABLE}."PAIN__C" ;;
+  }
+
+
+
+  dimension: payment_term__c {
+    type: string
+    sql: ${TABLE}."PAYMENT_TERM__C" ;;
+  }
+
+ 
+
+  dimension: probability {
+    hidden: no
+    type: number
+    sql: ${TABLE}."PROBABILITY" ;;
+  }
+
+
+
+  dimension: stage_name {
+    hidden: no
+    type: string
+    sql: ${TABLE}."STAGENAME" ;;
+  }
+
+  dimension_group: start {
+    hidden: no
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."START_DATE__C" ;;
+  }
+
+  dimension_group: systemmodstamp {
+    hidden: yes
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."SYSTEMMODSTAMP" ;;
+  }
+
+
+  dimension: type {
+    hidden: no
+    type: string
+    sql: ${TABLE}."TYPE" ;;
+  }
+
+  dimension: users__c {
+    hidden: yes
+    type: string
+    sql: ${TABLE}."USERS__C" ;;
+  }
+
+  dimension: users_details__c {
+    hidden: yes
+    type: string
+    sql: ${TABLE}."USERS_DETAILS__C" ;;
+  }
+
+  dimension: zone__c {
+    hidden: yes
+    type: string
+    sql: ${TABLE}."ZONE__C" ;;
+  }
+
+
+
+
+  dimension_group: current {
+    hidden: yes
+    type: time
+    datatype: timestamp
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year,
+      fiscal_month_num,
+      fiscal_quarter,
+      fiscal_quarter_of_year,
+      fiscal_year
+    ]
+    sql: CURRENT_TIMESTAMP() ;;
+  }
+
+  # BQ Specific
+  # Current day number of fiscal quarter
+  dimension: day_of_fiscal_quarter {
+    hidden: no
+    description: "The day of the fiscal quarter the opportunity was closed in."
+    group_label: "Close Date"
+    type: duration_day
+    sql_start: DATE_TRUNC('QUARTER',${close_raw});;
+    sql_end: ${close_raw} ;;
+  }
+
+  dimension: current_day_of_fiscal_quarter {
+    hidden: yes
+    group_label: "Current Date"
+      type: duration_day
+    sql_start: DATE_TRUNC('QUARTER',${current_raw});;
+    sql_end: ${current_raw} ;;}
+
+  # BQ Specific
+  # Used specifically on "of Quota" tile as the comparison value
+  dimension: beginning_of_this_fiscal_quarter {
+    hidden: yes
+    type: date
+    sql: DATE_TRUNC('QUARTER',${current_raw}) ;;
+  }
+
+  dimension: beginning_of_next_fiscal_quarter {
+    hidden: yes
+    type: date
+    sql: dateadd(quarter, 1, to_date(DATE_TRUNC('QUARTER',${current_raw}))) ;;
+  }
+
+  dimension: days_in_quarter {
+    hidden: yes
+    type: duration_day
+    sql_start: ${beginning_of_this_fiscal_quarter} ;;
+    sql_end: ${beginning_of_next_fiscal_quarter} ;;
+  }
+
+  dimension: percent_of_quarter_reached {
+    hidden: no
+    type: number
+    sql: 1.0*${current_day_of_fiscal_quarter}/nullif(${days_in_quarter},0) ;;
+    value_format_name: percent_0
+  }
+
+  # measures    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+  measure: total_arr {
+    hidden: no
+    type: sum
+    sql: ${arr_usd} ;;
+    value_format_name: large_usd
+  }
+
+  measure: total_active_arr {
+    hidden: no
+    type: sum
+    sql: ${arr_usd} ;;
+    filters: [is_active: "Yes"]
+    value_format_name: large_usd
+    drill_fields: [name,account.name,opportunity_owner.name,total_arr,opportunity_line_item.effective_quantity,product.name,is_closed,is_active,is_pipeline,lead_source,created_date,close_date]
+
+  }
+
+  measure: total_arr_closed_won {
+    hidden: no
+    type: sum
+     sql: ${arr_usd} ;;
+    filters: [is_won: "Yes"]
+    value_format_name: large_usd
+  }
+
+  measure: total_closed_won_new_business_amount {
+    hidden: no
+    type: sum
+    sql: ${arr_usd} ;;
+    filters: [is_won: "Yes"]
+    filters: {
+      field: opportunity.type
+      value: "\"New Business\""
+    }
+    value_format_name: large_usd
+  }
+
+
+
+  dimension: is_lost {
+    hidden: no
+    type: yesno
+    sql: ${is_closed} AND NOT ${is_won} ;;
+  }
+
+   dimension: probability_group {
+    hidden: no
+    case: {
+      when: {
+        sql: ${probability} = 100 ;;
+        label: "Won"
+      }
+
+      when: {
+        sql: ${probability} > 80 ;;
+        label: "Above 80%"
+      }
+
+      when: {
+        sql: ${probability} > 60 ;;
+        label: "60 - 80%"
+      }
+
+      when: {
+        sql: ${probability} > 40 ;;
+        label: "40 - 60%"
+      }
+
+      when: {
+        sql: ${probability} > 20 ;;
+        label: "20 - 40%"
+      }
+
+      when: {
+        sql: ${probability} > 0 ;;
+        label: "Under 20%"
+      }
+
+      when: {
+        sql: ${probability} = 0 ;;
+        label: "Lost"
+      }
+    }
+  }
+
+
+  dimension: days_open {
+    hidden: no
+    type: duration_day
+    sql_start: ${created_raw} ;;
+    sql_end: coalesce(${close_raw}, current_date) ;;
+  }
+
+  dimension: created_to_closed_in_60 {
+    hidden: yes
+    type: yesno
+    sql: ${days_open} <=60 AND ${is_closed} = 'yes' AND ${is_won} = 'yes' ;;
+  }
+
+  # measures #
+
+
+  measure: average_revenue_won {
+    hidden: no
+    label: "Average Revenue (Closed/Won)"
+    type: average
+    sql: ${arr_usd} ;;
+
+    filters: {
+      field: is_won
+      value: "Yes"
+    }
+
+    value_format_name: large_usd
+  }
+
+  measure: average_revenue_lost {
+    hidden: no
+    label: "Average Revenue (Closed/Lost)"
+    type: average
+    sql: ${arr_usd} ;;
+
+    filters: {
+      field: is_lost
+      value: "Yes"
+    }
+
+    value_format_name: large_usd
+  }
+
+  measure: total_pipeline_revenue {
+    hidden: no
+    type: sum
+    sql: ${arr_usd} ;;
+
+    filters: {
+      field: is_closed
+      value: "No"
+    }
+
+    value_format_name: large_usd
+  }
+
+  measure: average_deal_size {
+    hidden: no
+    type: average
+    sql: ${arr_usd} ;;
+    value_format: "$#,##0"
+  }
+
+  measure: count_won {
+    hidden: no
+    type: count
+
+    filters: {
+      field: is_won
+      value: "Yes"
+    }
+
+
+  }
+
+  measure: average_days_open {
+    hidden: no
+    type: average
+    sql: ${days_open} ;;
+  }
+
+  measure: count_closed {
+    hidden: no
+    type: count
+
+    filters: {
+      field: is_closed
+      value: "Yes"
+    }
+  }
+
+  measure: count_open {
+    hidden: no
+    type: count
+
+    filters: {
+      field: is_closed
+      value: "No"
+    }
+  }
+
+  measure: count_lost {
+    hidden: no
+    type: count
+
+    filters: {
+      field: is_closed
+      value: "Yes"
+    }
+
+    filters: {
+      field: is_won
+      value: "No"
+    }
+
+
+  }
+
+  measure: win_percentage {
+    hidden: no
+    type: number
+    sql:  ${count_won} / NULLIF(${count_closed}, 0) ;;
+    value_format_name: percent_2
+  }
+
+  measure: open_percentage {
+    hidden: no
+    type: number
+    sql: ${count_open} / NULLIF(${count}, 0) ;;
+    value_format_name: percent_2
+  }
+
+  measure: count_new_business_won {
+    hidden: no
+    type: count
+
+    filters: {
+      field: is_won
+      value: "Yes"
+    }
+
+    filters: {
+      field: opportunity.type
+      value: "\"New Business\""
+    }
+
+    #       is_deleted: 0
+  }
+
+  measure: count_new_business {
+    hidden: no
+    type: count
+
+    filters: {
+      field: opportunity.type
+      value: "\"New Business\""
+    }
+
+    #       is_deleted: 0
+  }
+
+  dimension: is_pipeline {
+    hidden: no
+    sql: ${forecast_category} IN ('Pipeline','Forecast','BestCase') ;;
+    type: yesno
+  }
+
+  measure: average_amount {
+    hidden: no
+    label: "Average Amount"
+    type: average
+    sql: ${amount} ;;
+    value_format_name: large_usd
+  }
+
+  dimension: days_to_closed_won {
+    hidden: no
+    description: "Number of days from opportunity creation to Closed-Won status"
+    type: number
+    sql: CASE WHEN ${is_closed} AND ${is_won} THEN ${days_open}
+                ELSE null
+                END ;;
+  }
+
+  dimension_group: as_customer  {
+
+    type: duration
+    datatype: date
+    sql_start: ${close_date}  ;;
+    sql_end: current_date ;;
+  }
+
+  dimension_group: as_opportunity  {
+    type: duration
+    datatype: date
+    sql_start: ${created_date}  ;;
+    sql_end: current_date ;;
+  }
+
+  dimension: days_as_opportunity_tier {
+    type: tier
+    sql: ${days_as_opportunity} ;;
+    tiers: [0, 5, 10, 15, 20, 25, 30, 35, 40, 60, 75, 90 ]
+    style:integer
+    hidden:  yes
+  }
+
+  measure: total_pipeline_amount {
+    hidden: no
+    label: "Pipeline Amount"
+    type: sum
+    sql: ${amount} ;;
+    filters: {
+      field: is_closed
+      value: "No"
+    }
+    filters: {
+      field: is_pipeline
+      value: "Yes"
+    }
+    value_format_name: large_usd
+    description: "All open Pipeline Opps"
+  }
+
+  dimension: deal_size_tier {
+    hidden: no
+    type: string
+    case: {
+      when: {
+        label: "$0 - $10K"
+        sql: ${amount} < 10000 ;;
+      }
+      when: {
+        label: "$10K - $50K"
+        sql: ${amount} < 50000;;
+      }
+      when: {
+        label: "$50K - $100K"
+        sql: ${amount} < 100000 ;;
+      }
+      when: {
+        label: "$100K - $500K"
+        sql: ${amount} < 500000 ;;
+      }
+      when: {
+        label: "$500K - $1M"
+        sql: ${amount} < 1000000 ;;
+      }
+      when: {
+        label: "Over $1M"
+        sql: ${amount} > 1000000 ;;
+      }
+      else: "Amount Unspecified"
+    }
+    order_by_field: sort_deal_size
+  }
+
+  dimension: sort_deal_size {
+    type: number
+    hidden: yes
+    sql: CASE
+         WHEN ${amount} < 10000
+         THEN 1
+         WHEN ${amount} < 50000
+         THEN 2
+         WHEN ${amount} < 100000
+         THEN 3
+        WHEN  ${amount} < 500000
+         THEN 4
+         WHEN ${amount} < 1000000
+         THEN 5
+         WHEN ${amount} > 1000000
+         THEN 6
+        ELSE
+          7
+      END;;
+  }
+
+  dimension: is_active_contract_calendar {
+    hidden: yes
+    type: yesno
+    sql:   ${start_date} <= ${calendar.calendar_date}
+      and (${end_date} is NULL or ${end_date} > ${calendar.calendar_date});;
+  }
+
+  measure: active_revenue {
+    hidden: yes
+    type: sum
+    sql: 1.0*${arr_usd}/12;;
+    filters: [is_active_contract_calendar:"Yes"]
+  }
+
+  dimension: days_to_expiration {
+    type: duration_day
+    sql_start: ${current_date} ;;
+    sql_end: ${end_date} ;;
+  }
+
+  dimension: expires_soon {
+    type: yesno
+    sql: ${days_to_expiration}<60 and ${days_to_expiration}>0;;
+  }
+
+
+  measure: count {
+    type: count
+
+  }
+
+
+
+
+}
