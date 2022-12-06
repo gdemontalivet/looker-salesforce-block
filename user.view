@@ -1,0 +1,192 @@
+view: user {
+  sql_table_name: "SALESFORCE"."USER"
+    ;;
+
+  dimension: id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}."ID" ;;
+  }
+
+  dimension: accountid {
+    type: string
+    sql: ${TABLE}."ACCOUNTID" ;;
+  }
+
+  dimension: companyname {
+    type: string
+    sql: ${TABLE}."COMPANYNAME" ;;
+  }
+
+  dimension: contactid {
+    type: string
+    sql: ${TABLE}."CONTACTID" ;;
+  }
+
+  dimension: createdbyid {
+    type: string
+    sql: ${TABLE}."CREATEDBYID" ;;
+  }
+
+  dimension_group: createddate {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."CREATEDDATE" ;;
+  }
+
+  dimension: department {
+    type: string
+    sql: ${TABLE}."DEPARTMENT" ;;
+  }
+
+  dimension: division {
+    type: string
+    sql: ${TABLE}."DIVISION" ;;
+  }
+
+  dimension: firstname {
+    type: string
+    sql: ${TABLE}."FIRSTNAME" ;;
+  }
+
+  dimension: isactive {
+    type: string
+    sql: ${TABLE}."ISACTIVE" ;;
+  }
+
+  dimension: lastmodifiedbyid {
+    type: string
+    sql: ${TABLE}."LASTMODIFIEDBYID" ;;
+  }
+
+  dimension_group: lastmodifieddate {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."LASTMODIFIEDDATE" ;;
+  }
+
+  dimension: lastname {
+    type: string
+    sql: ${TABLE}."LASTNAME" ;;
+  }
+
+  dimension: middlename {
+    type: string
+    sql: ${TABLE}."MIDDLENAME" ;;
+  }
+
+  dimension: name {
+    type: string
+    sql: ${TABLE}."NAME" ;;
+    link: {
+      label: "{{ value }} dashboard drilldown"
+      url: "/dashboards/3?Sales%20Rep={{ value }}"
+    }
+  }
+
+  dimension_group: sf_created {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."SF_CREATED" ;;
+  }
+
+  dimension_group: sf_updated {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."SF_UPDATED" ;;
+  }
+
+  dimension: suffix {
+    type: string
+    sql: ${TABLE}."SUFFIX" ;;
+  }
+
+  dimension: username {
+    type: string
+    sql: ${TABLE}."USERNAME" ;;
+  }
+
+  dimension: userroleid {
+    type: string
+    sql: ${TABLE}."USERROLEID" ;;
+  }
+
+  measure: count {
+    type: count
+
+  }
+
+  filter: name_select {
+    suggest_dimension: name
+  }
+
+  dimension: rep_comparitor {
+    sql: CASE
+        WHEN {% condition name_select %} ${name} {% endcondition %}
+          THEN ${name}
+      ELSE 'Rest of Sales Team'
+      END
+       ;;
+  }
+
+
+
+   measure: average_revenue_pipeline {
+    type: number
+    sql: ${opportunity.total_pipeline_revenue}/ NULLIF(${count},0) ;;
+    value_format: "[>=1000000]$0.00,,\"M\";[>=1000]$0.00,\"K\";$0.00"
+    drill_fields: [account.name, opportunity.type, opportunity.closed_date, opportunity.total_acv]
+  }
+
+  set: opportunity_set {
+    fields: [average_revenue_pipeline]
+  }
+
+
+
+
+
+  # ----- Sets of fields for drilling ------
+  drill_fields: [
+      id,
+      username,
+      name,
+      firstname,
+      middlename,
+      lastname,
+      companyname
+    ]
+
+}
