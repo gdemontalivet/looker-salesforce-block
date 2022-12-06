@@ -1,0 +1,198 @@
+view: contact {
+  sql_table_name: "SALESFORCE"."CONTACT"
+    ;;
+  drill_fields: [id]
+
+  dimension: id {
+    primary_key: yes
+    type: string
+    sql: ${TABLE}."ID" ;;
+  }
+
+  dimension: account_name_display__c {
+    type: string
+    sql: ${TABLE}."ACCOUNT_NAME_DISPLAY__C" ;;
+  }
+
+  dimension: account_id {
+    type: string
+    sql: ${TABLE}."ACCOUNTID" ;;
+  }
+
+  dimension: contact_no_longer_at_company__c {
+    type: string
+    sql: ${TABLE}."CONTACT_NO_LONGER_AT_COMPANY__C" ;;
+  }
+
+  dimension: created_by_id {
+    type: string
+    sql: ${TABLE}."CREATEDBYID" ;;
+  }
+
+  dimension_group: created {
+    type: time
+    sql: ${TABLE}."CREATEDDATE" ;;
+  }
+
+  dimension: currencyisocode {
+    type: string
+    sql: ${TABLE}."CURRENCYISOCODE" ;;
+  }
+
+  dimension: department {
+    type: string
+    sql: ${TABLE}."DEPARTMENT" ;;
+  }
+
+  dimension: department_contact__c {
+    type: string
+    sql: ${TABLE}."DEPARTMENT_CONTACT__C" ;;
+  }
+
+  dimension: description {
+    type: string
+    sql: ${TABLE}."DESCRIPTION" ;;
+  }
+
+  dimension: email {
+    type: string
+    sql: ${TABLE}."EMAIL" ;;
+  }
+
+  dimension: first_name {
+    type: string
+    sql: ${TABLE}."FIRSTNAME" ;;
+  }
+
+  dimension: hasoptedoutofemail {
+    type: string
+    sql: ${TABLE}."HASOPTEDOUTOFEMAIL" ;;
+  }
+
+  dimension: individualid {
+    type: string
+    sql: ${TABLE}."INDIVIDUALID" ;;
+  }
+
+  dimension: is_deleted {
+    type: string
+    sql: ${TABLE}."ISDELETED" ;;
+  }
+
+
+
+  dimension: lastactivitydate {
+    type: string
+    sql: ${TABLE}."LASTACTIVITYDATE" ;;
+  }
+
+  dimension: lastmodifiedbyid {
+    type: string
+    sql: ${TABLE}."LASTMODIFIEDBYID" ;;
+  }
+
+  dimension: lastmodifieddate {
+    type: string
+    sql: ${TABLE}."LASTMODIFIEDDATE" ;;
+  }
+
+  dimension: last_name {
+    type: string
+    sql: ${TABLE}."LASTNAME" ;;
+  }
+
+  dimension: lead_source {
+    type: string
+    sql: ${TABLE}."LEADSOURCE" ;;
+  }
+
+  dimension: masterrecordid {
+    type: string
+    sql: ${TABLE}."MASTERRECORDID" ;;
+  }
+
+  dimension: middlename {
+    type: string
+    sql: ${TABLE}."MIDDLENAME" ;;
+  }
+
+  dimension: name {
+    type: string
+    sql: ${TABLE}."NAME" ;;
+  }
+
+
+  dimension: owner_id {
+    type: string
+    sql: ${TABLE}."OWNERID" ;;
+  }
+
+  dimension: reportstoid {
+    type: string
+    sql: ${TABLE}."REPORTSTOID" ;;
+  }
+
+  dimension: salutation {
+    type: string
+    sql: ${TABLE}."SALUTATION" ;;
+  }
+
+  dimension_group: sf_created {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."SF_CREATED" ;;
+  }
+
+  dimension_group: sf_updated {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."SF_UPDATED" ;;
+  }
+
+  dimension: suffix {
+    type: string
+    sql: ${TABLE}."SUFFIX" ;;
+  }
+
+  dimension: systemmodstamp {
+    type: string
+    sql: ${TABLE}."SYSTEMMODSTAMP" ;;
+  }
+
+  dimension: tags__c {
+    type: string
+    sql: ${TABLE}."TAGS__C" ;;
+  }
+
+  dimension: title {
+    type: string
+    sql: ${TABLE}."TITLE" ;;
+  }
+
+  dimension: title__c {
+    type: string
+    sql: ${TABLE}."TITLE__C" ;;
+  }
+
+
+  measure: count {
+    type: count
+    drill_fields: [id, last_name, name, first_name, middlename]
+  }
+}
