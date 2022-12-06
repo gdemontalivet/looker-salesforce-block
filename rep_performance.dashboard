@@ -1,0 +1,807 @@
+- dashboard: rep_performance
+  title: Rep Performance
+  layout: newspaper
+  description: ''
+  preferred_slug: 7jcwa4G5Vlq02cATlAWfVM
+  elements:
+  - title: Bookings (QTD)
+    name: Bookings (QTD)
+    model: salesforce_block
+    explore: opportunity
+    type: single_value
+    fields: [opportunity.total_arr, opportunity.close_fiscal_quarter]
+    pivots: [opportunity.close_fiscal_quarter]
+    fill_fields: [opportunity.close_fiscal_quarter]
+    filters:
+      opportunity.close_date: this fiscal quarter, last fiscal quarter
+      opportunity.is_won: 'Yes'
+    sorts: [opportunity.close_fiscal_quarter desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields: [{table_calculation: change, label: Change, expression: "(pivot_index(${opportunity.total_arr},\
+          \ 1) - pivot_index(${opportunity.total_arr}, 2))/pivot_index(${opportunity.total_arr},\
+          \ 2)", value_format: !!null '', value_format_name: percent_1, _kind_hint: supermeasure,
+        _type_hint: number}]
+    filter_expression: |-
+      # Only compare QTDs
+      ${opportunity.day_of_fiscal_quarter} <= ${opportunity.current_day_of_fiscal_quarter}
+    custom_color_enabled: true
+    custom_color: ''
+    show_single_value_title: true
+    show_comparison: true
+    comparison_type: change
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    comparison_label: ''
+    enable_conditional_formatting: false
+    conditional_formatting: [{type: equal to, value: !!null '', background_color: "#3EB0D5",
+        font_color: !!null '', color_application: {collection_id: b43731d5-dc87-4a8e-b807-635bef3948e7,
+          palette_id: 85de97da-2ded-4dec-9dbd-e6a7d36d5825}, bold: false, italic: false,
+        strikethrough: false, fields: !!null ''}]
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    font_size: small
+    series_types: {}
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 2
+    col: 0
+    width: 4
+    height: 4
+  - title: Lifetime Bookings
+    name: Lifetime Bookings
+    model: salesforce_block
+    explore: opportunity
+    type: single_value
+    fields: [opportunity.total_arr]
+    filters:
+      opportunity.is_won: 'Yes'
+    limit: 500
+    column_limit: 50
+    custom_color_enabled: true
+    custom_color: ''
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    comparison_label: Opps Won
+    font_size: small
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 2
+    col: 18
+    width: 6
+    height: 4
+  - title: Closed Won Opps
+    name: Closed Won Opps
+    model: salesforce_block
+    explore: opportunity
+    type: single_value
+    fields: [opportunity.count]
+    filters:
+      opportunity.is_won: 'Yes'
+      opportunity.is_closed: 'Yes'
+    sorts: [opportunity.total_closed_won_new_business_amount desc]
+    limit: 500
+    column_limit: 50
+    custom_color_enabled: true
+    custom_color: ''
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: progress_percentage
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    comparison_label: Quota
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    font_size: small
+    series_types: {}
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 2
+    col: 8
+    width: 4
+    height: 4
+  - title: Pipeline QTD
+    name: Pipeline QTD
+    model: salesforce_block
+    explore: opportunity
+    type: single_value
+    fields: [opportunity.total_pipeline_amount]
+    filters:
+      opportunity.close_date: this fiscal quarter
+    limit: 500
+    column_limit: 50
+    filter_expression: |-
+      # Only compare QTDs
+      ${opportunity.day_of_fiscal_quarter} <= ${opportunity.current_day_of_fiscal_quarter}
+    custom_color_enabled: true
+    custom_color: ''
+    show_single_value_title: true
+    single_value_title: ''
+    show_comparison: false
+    comparison_type: change
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    comparison_label: vs. Last Quarter
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    font_size: small
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 2
+    col: 4
+    width: 4
+    height: 4
+  - title: Win Percentage By Deal Size
+    name: Win Percentage By Deal Size
+    model: salesforce_block
+    explore: opportunity
+    type: looker_pie
+    fields: [opportunity.win_percentage, opportunity.deal_size_tier, opportunity.sort_deal_size]
+    filters:
+      opportunity.win_percentage: ">0"
+    sorts: [opportunity.deal_size_tier]
+    limit: 500
+    column_limit: 50
+    value_labels: legend
+    label_type: labPer
+    series_colors:
+      opportunity.win_percentage: "#B1399E"
+      "$0 - $10K": "#F67F68"
+      "$10K - $50K": "#252A30"
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    y_axes: [{label: '', orientation: left, series: [{axisId: opportunity.win_percentage,
+            id: opportunity.win_percentage, name: Win Percentage}], showLabels: true,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    font_size: small
+    series_types: {}
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    custom_color_enabled: true
+    custom_color: ''
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: progress_percentage
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    comparison_label: Quota
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    hidden_fields: [opportunity.sort_deal_size]
+    defaults_version: 1
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 14
+    col: 8
+    width: 7
+    height: 8
+  - title: Closed Won Opportunities
+    name: Closed Won Opportunities
+    model: salesforce_block
+    explore: opportunity
+    type: looker_grid
+    fields: [opportunity.name, opportunity.close_date, opportunity.days_as_customer,
+      opportunity.total_arr_closed_won, opportunity.type, opportunity.lead_source]
+    filters:
+      opportunity.close_date: before 0 minutes ago
+    sorts: [opportunity.close_date desc]
+    limit: 50
+    column_limit: 50
+    show_totals: true
+    show_row_totals: true
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    size_to_fit: true
+    series_labels:
+      account.logo64: Logo
+    series_cell_visualizations:
+      opportunity.total_arr_closed_won:
+        is_active: true
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    truncate_column_names: false
+    subtotals_at_bottom: false
+    hide_totals: false
+    hide_row_totals: false
+    font_size: small
+    series_types: {}
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 22
+    col: 0
+    width: 24
+    height: 7
+  - title: Rep Name
+    name: Rep Name
+    model: salesforce_block
+    explore: opportunity
+    type: single_value
+    fields: [opportunity_owner.name]
+    sorts: [opportunity_owner.name]
+    limit: 1
+    column_limit: 50
+    custom_color_enabled: true
+    custom_color: ''
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    comparison_label: Opps Won
+    font_size: small
+    hidden_fields: []
+    y_axes: []
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 0
+    col: 0
+    width: 24
+    height: 2
+  - title: Opportunities By Stage
+    name: Opportunities By Stage
+    model: salesforce_block
+    explore: opportunity
+    type: looker_column
+    fields: [opportunity.stage_name, opportunity.total_arr, opportunity.count]
+    filters:
+      opportunity.total_arr: ">0"
+      opportunity.is_closed: 'No'
+    sorts: [opportunity.total_arr desc]
+    limit: 500
+    column_limit: 50
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    y_axes: [{label: '', orientation: left, series: [{axisId: opportunity.total_arr,
+            id: opportunity.total_arr, name: Total Amount}], showLabels: false, showValues: false,
+        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear},
+      {label: !!null '', orientation: right, series: [{axisId: opportunity.count,
+            id: opportunity.count, name: Number of Opportunities}], showLabels: false,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}]
+    series_types:
+      opportunity.count: line
+    series_colors:
+      opportunity.total_arr: "#F67F68"
+    hidden_fields: []
+    defaults_version: 1
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 14
+    col: 0
+    width: 8
+    height: 8
+  - title: Open Opportunities
+    name: Open Opportunities
+    model: salesforce_block
+    explore: opportunity
+    type: looker_grid
+    fields: [opportunity.name, opportunity.type, opportunity.created_date, opportunity.close_date,
+      opportunity.stage_name, opportunity.days_open, opportunity.next_step, opportunity.amount]
+    filters:
+      opportunity.is_pipeline: 'Yes'
+      opportunity.type: ''
+    sorts: [opportunity.close_date]
+    limit: 500
+    column_limit: 50
+    show_totals: true
+    show_row_totals: true
+    show_view_names: false
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    size_to_fit: true
+    series_cell_visualizations:
+      opportunity.amount:
+        is_active: true
+    table_theme: white
+    limit_displayed_rows: false
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: '12'
+    rows_font_size: '12'
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    truncate_column_names: false
+    subtotals_at_bottom: false
+    hide_totals: false
+    hide_row_totals: false
+    series_types: {}
+    hidden_fields: [opportunity.first_meeting_date, opportunity_history_days_in_current_stage.most_recent_stage_change_date_date,
+      opportunity_history_days_in_current_stage.most_recent_stage_change_date]
+    y_axes: []
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 14
+    col: 15
+    width: 9
+    height: 8
+  - title: Cumulative Bookings (QTD)
+    name: Cumulative Bookings (QTD)
+    model: salesforce_block
+    explore: opportunity
+    type: looker_column
+    fields: [opportunity.total_arr, opportunity.close_date]
+    fill_fields: [opportunity.close_date]
+    filters:
+      opportunity.close_date: 1 quarters
+      opportunity.is_won: 'Yes'
+    sorts: [opportunity.close_date]
+    limit: 500
+    column_limit: 50
+    dynamic_fields: [{table_calculation: running_total, label: Running Total, expression: 'running_total(${opportunity.total_arr})',
+        value_format: !!null '', value_format_name: usd_0, _kind_hint: measure, _type_hint: number},
+      {table_calculation: is_before_today_2, label: Is Before Today, expression: 'if(now()
+          < ${opportunity.close_date}, no, yes)', value_format: !!null '', value_format_name: !!null '',
+        _kind_hint: dimension, _type_hint: yesno}]
+    x_axis_gridlines: false
+    y_axis_gridlines: false
+    show_view_names: 'true'
+    y_axes: [{label: '', orientation: left, series: [{axisId: opportunity.total_arr,
+            id: opportunity.total_arr, name: Closed Won Amount}], showLabels: false,
+        showValues: false, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
+        type: linear}, {label: !!null '', orientation: right, series: [{axisId: running_total,
+            id: running_total, name: Running Total}], showLabels: false, showValues: false,
+        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    series_types:
+      running_total: area
+    point_style: none
+    series_labels:
+      opportunity.total_arr: Closed Won Amount
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: time
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    show_null_points: true
+    interpolation: linear
+    custom_color_enabled: true
+    custom_color: ''
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: progress_percentage
+    comparison_reverse_colors: false
+    show_comparison_label: false
+    comparison_label: Gap
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    hidden_fields: [opportunity.total_closed_won_new_business_amount]
+    hidden_points_if_no: [is_before_today_2]
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 6
+    col: 0
+    width: 15
+    height: 8
+  - title: Biggest Wins (All Time)
+    name: Biggest Wins (All Time)
+    model: salesforce_block
+    explore: opportunity
+    type: looker_bar
+    fields: [opportunity.total_arr, opportunity.name]
+    filters:
+      opportunity.is_won: 'Yes'
+    sorts: [opportunity.total_arr desc]
+    limit: 10
+    column_limit: 50
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: [{label: '', orientation: left, series: [{id: opportunity.total_closed_won_new_business_amount,
+            name: 'Closed Won ACV ', axisId: opportunity.total_closed_won_new_business_amount}],
+        showLabels: false, showValues: false, unpinAxis: false, tickDensity: default,
+        tickDensityCustom: 5, type: linear}]
+    font_size: small
+    series_types: {}
+    series_colors:
+      opportunity.total_closed_won_new_business_amount: "#462C9D"
+      opportunity.total_arr: "#F67F68"
+    show_row_numbers: true
+    truncate_column_names: false
+    subtotals_at_bottom: false
+    hide_totals: false
+    hide_row_totals: false
+    table_theme: white
+    enable_conditional_formatting: false
+    conditional_formatting: [{type: along a scale..., value: !!null '', background_color: !!null '',
+        font_color: !!null '', color_application: {collection_id: legacy, palette_id: legacy_diverging1},
+        bold: false, italic: false, strikethrough: false, fields: !!null ''}]
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    hidden_fields: [opportunity.name_id]
+    defaults_version: 1
+    listen:
+      Sales Rep: opportunity_owner.name
+    row: 6
+    col: 15
+    width: 9
+    height: 8
+  - title: Opportunities to Wins by Rep
+    name: Opportunities to Wins by Rep
+    model: salesforce_block
+    explore: opportunity
+    type: looker_line
+    fields: [opportunity_owner.rep_comparitor, opportunity.count, opportunity.count_won,
+      opportunity.close_month]
+    pivots: [opportunity_owner.rep_comparitor]
+    fill_fields: [opportunity.close_month]
+    filters:
+      opportunity.close_month: 9 months ago for 9 months
+    sorts: [opportunity_owner.rep_comparitor, opportunity.close_month desc]
+    limit: 500
+    column_limit: 50
+    dynamic_fields: [{table_calculation: opportunities_to_won, label: opportunities_to_won,
+        expression: '1.0*${opportunity.count_won}/${opportunity.count}', value_format: "#.0%"}]
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    show_null_points: true
+    interpolation: linear
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: []
+    y_axis_value_format: "#%"
+    colors: ["#FFCC00", "#1E2023", "#3399CC", "#CC3399", "#66CC66", "#999999", "#FF4E00",
+      "#A2ECBA", "#9932CC", "#0000CD"]
+    font_size: small
+    hidden_fields: [opportunity.count_won, opportunity.count]
+    defaults_version: 1
+    listen:
+      Sales Rep: opportunity_owner.name_select
+    row: 29
+    col: 0
+    width: 8
+    height: 6
+  - title: SalesRep - Revenue Won comparison
+    name: SalesRep - Revenue Won comparison
+    model: salesforce_block
+    explore: opportunity
+    type: looker_bar
+    fields: [opportunity_owner.rep_comparitor, opportunity.average_revenue_won]
+    filters: {}
+    sorts: [opportunity_owner.rep_comparitor]
+    limit: 500
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: []
+    y_axis_labels: [Total Revenue Won]
+    hide_legend: false
+    colors: ["#FFCC00", "#1E2023", "#3399CC", "#CC3399", "#66CC66", "#999999", "#FF4E00",
+      "#A2ECBA", "#9932CC", "#0000CD"]
+    font_size: small
+    label_color: ["#3399CC"]
+    defaults_version: 1
+    hidden_fields: []
+    listen:
+      Sales Rep: opportunity_owner.name_select
+    row: 29
+    col: 8
+    width: 8
+    height: 6
+  - title: SalesRep - Win Rate Comparison
+    name: SalesRep - Win Rate Comparison
+    model: salesforce_block
+    explore: opportunity
+    type: looker_bar
+    fields: [opportunity_owner.rep_comparitor, opportunity.win_percentage]
+    filters: {}
+    sorts: [opportunity_owner.rep_comparitor]
+    limit: 500
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: []
+    y_axis_labels: [Opportunity Win Rate]
+    hide_legend: false
+    colors: ["#FFCC00", "#1E2023", "#3399CC", "#CC3399", "#66CC66", "#999999", "#FF4E00",
+      "#A2ECBA", "#9932CC", "#0000CD"]
+    font_size: small
+    label_color: ["#3399CC"]
+    defaults_version: 1
+    hidden_fields: []
+    listen:
+      Sales Rep: opportunity_owner.name_select
+    row: 29
+    col: 16
+    width: 8
+    height: 6
+  - title: SalesRep - Revenue Pipeline comparison
+    name: SalesRep - Revenue Pipeline comparison
+    model: salesforce_block
+    explore: opportunity
+    type: looker_bar
+    fields: [opportunity_owner.rep_comparitor, opportunity_owner.average_revenue_pipeline]
+    filters: {}
+    sorts: [opportunity_owner.rep_comparitor]
+    limit: 500
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    color_application:
+      collection_id: custom
+      palette_id: custom-categorical-0
+      options:
+        steps: 5
+    y_axes: []
+    y_axis_labels: [Total Revenue Pipeline]
+    hide_legend: false
+    colors: ["#FFCC00", "#1E2023", "#3399CC", "#CC3399", "#66CC66", "#999999", "#FF4E00",
+      "#A2ECBA", "#9932CC", "#0000CD"]
+    font_size: small
+    label_color: ["#3399CC"]
+    defaults_version: 1
+    hidden_fields: []
+    listen:
+      Sales Rep: opportunity_owner.name_select
+    row: 35
+    col: 0
+    width: 8
+    height: 6
+  - title: Win Percentage of Closed Deals (This Quarter)
+    name: Win Percentage of Closed Deals (This Quarter)
+    model: salesforce_block
+    explore: opportunity
+    type: single_value
+    fields: [opportunity.win_percentage]
+    filters:
+      opportunity.close_date: last quarter
+      opportunity_owner.name: ''
+    limit: 500
+    custom_color_enabled: true
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    enable_conditional_formatting: false
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    font_size: small
+    text_color: "#49719a"
+    defaults_version: 1
+    hidden_fields: []
+    y_axes: []
+    listen: {}
+    row: 2
+    col: 12
+    width: 6
+    height: 4
+  filters:
+  - name: Sales Rep
+    title: Sales Rep
+    type: field_filter
+    default_value: Andrew
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+    model: salesforce_block
+    explore: opportunity
+    listens_to_filters: []
+    field: opportunity_owner.name
