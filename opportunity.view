@@ -1,5 +1,5 @@
 view: opportunity {
-  sql_table_name: "SC_PRESENTATION_LAYER"."VW_TB_SF_OPPORTUNITY"
+  sql_table_name: "SALESFORCE"."OPPORTUNITY"
     ;;
     fields_hidden_by_default: yes
   drill_fields: [name,account.name,opportunity_owner.name,total_arr,is_closed,is_active,is_pipeline,lead_source,created_date,close_date]
