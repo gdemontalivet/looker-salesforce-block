@@ -2,7 +2,7 @@ connection: "snowflake"
 
 include: "/**/*.view.lkml"                # include all views in the views/ folder in this project
 # include: "/**/*.view.lkml"                 # include all views in this project
-# include: "/views/dashboards/*.dashboard.lookml"   # include a LookML dashboard called my_dashboard
+# include: "/**/*.dashboard.lookml"   # include a LookML dashboard called my_dashboard
 
 named_value_format: large_number {
   value_format: "[>=1000000]0.00,,\"M\";[>=1000]0.00,\"K\";0"
