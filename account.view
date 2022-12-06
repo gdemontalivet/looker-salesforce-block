@@ -1,0 +1,206 @@
+view: account {
+  sql_table_name: "SALESFORCE"."ACCOUNT"
+    ;;
+  drill_fields: [id]
+  fields_hidden_by_default: yes
+
+  dimension: id {
+    hidden: no
+    primary_key: yes
+    type: string
+    sql: ${TABLE}."ID" ;;
+  }
+
+  dimension: segment {
+    hidden: no
+    type: string
+    sql: ${TABLE}."ACCOUNT_SEGMENT__C" ;;
+  }
+
+  dimension: account_team__c {
+    type: string
+    sql: ${TABLE}."ACCOUNT_TEAM__C" ;;
+  }
+
+  dimension: type {
+    hidden: no
+    type: string
+    sql: ${TABLE}."ACCOUNT_TYPE__C" ;;
+  }
+
+  dimension: billing_city {
+    group_label: "Billing Address"
+    type: string
+    sql: ${TABLE}."BILLINGCITY" ;;
+  }
+
+  dimension: billing_country {
+    hidden: no
+    group_label: "Billing Address"
+    map_layer_name: countries
+    type: string
+    sql: ${TABLE}."BILLINGCOUNTRY" ;;
+  }
+
+  dimension: billing_countrycode {
+    group_label: "Billing Address"
+    hidden: yes
+    type: string
+    sql: ${TABLE}."BILLINGCOUNTRYCODE" ;;
+  }
+
+  dimension: billing_latitude {
+    group_label: "Billing Address"
+    type: string
+    sql: ${TABLE}."BILLINGLATITUDE" ;;
+  }
+
+  dimension: billing_longitude {
+    group_label: "Billing Address"
+    type: string
+    sql: ${TABLE}."BILLINGLONGITUDE" ;;
+  }
+
+  dimension: billing_postal_code {
+    group_label: "Billing Address"
+    type: string
+    sql: ${TABLE}."BILLINGPOSTALCODE" ;;
+  }
+
+  dimension: billing_state {
+    group_label: "Billing Address"
+    type: string
+    sql: ${TABLE}."BILLINGSTATE" ;;
+  }
+
+  dimension: billing_state_code {
+    group_label: "Billing Address"
+    hidden: yes
+    type: string
+    sql: ${TABLE}."BILLINGSTATECODE" ;;
+  }
+
+  dimension: createdbyid {
+    type: string
+    sql: ${TABLE}."CREATEDBYID" ;;
+  }
+
+  dimension_group: created {
+    hidden: no
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."CREATEDDATE" ;;
+  }
+
+  dimension: is_deleted {
+    type: string
+    sql: initcap(${TABLE}."ISDELETED")='True' ;;
+  }
+
+  dimension: lastmodifiedbyid {
+    type: string
+    sql: ${TABLE}."LASTMODIFIEDBYID" ;;
+  }
+
+  dimension_group: last_modified {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."LASTMODIFIEDDATE" ;;
+  }
+
+  dimension: name {
+    hidden: no
+    type: string
+    sql: ${TABLE}."NAME" ;;
+    link: {
+      label: "Open in Salesforce"
+      url: "https://yourinstancename.lightning.force.com/lightning/r/account/{{ id._value }}/view"
+      icon_url: "https://www.awsquality.com/wp-content/uploads/2020/08/salesforce-icon-png-7.png"
+    }
+
+    link: {
+      label: "{{ value }} lookup dashboard"
+      url: "/dashboards/6?ID={{ id._value }}"
+    }
+  }
+
+  dimension: owner_id {
+    type: string
+    sql: ${TABLE}."OWNERID" ;;
+  }
+
+  dimension: parent_id {
+    type: string
+    sql: ${TABLE}."PARENTID" ;;
+  }
+
+  dimension: record_type_id {
+    type: string
+    sql: ${TABLE}."RECORDTYPEID" ;;
+  }
+
+  dimension_group: sf_created {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."SF_CREATED" ;;
+  }
+
+  dimension_group: sf_updated {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."SF_UPDATED" ;;
+  }
+
+  dimension: tier__c {
+    hidden: no
+    label: "Tier"
+    type: string
+    sql: ${TABLE}."TIER__C" ;;
+  }
+
+  measure: count {
+    type: count
+    drill_fields: [id, name]
+  }
+
+
+  measure: percent_of_accounts {
+    description: "Percent of accounts out of the total number of accounts"
+    type: percent_of_total
+    sql: ${count} ;;
+  }
+
+
+}
